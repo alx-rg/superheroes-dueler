@@ -4,6 +4,7 @@ import random
 
 from ability import Ability
 from armor import Armor
+from weapon import Weapon
 
 class Hero:
   # We want our hero to have a default "starting_health",
@@ -34,11 +35,6 @@ class Hero:
 				else:
 					return
 
-
-		# winner = random.choice([self, opponent])
-		# print(f"{winner.name} wins!")
-		# return winner
-
 	def add_ability(self, ability):
 		self.abilities.append(ability)
 
@@ -57,12 +53,15 @@ class Hero:
 			total_block += armor.block()
 		return total_block
 
+	def add_weapon(self, weapon):
+		self.abilities.append(weapon)
+
 	def take_damage(self, damage):
-		ttl_dmg = damage - self.defend()
+		damage_total = damage - self.defend()
 		while self.current_health > 0:
-			if ttl_dmg > 0:
-				self.current_health -= ttl_dmg
-				print(f'{self.name} has taken {ttl_dmg} of damage.')
+			if damage_total > 0:
+				self.current_health -= damage_total
+				print(f'{self.name} has taken {damage_total} of damage.')
 				print(f'Health is down to: {self.current_health}')
 			else:
 				return
@@ -94,7 +93,14 @@ class Hero:
 if __name__ == "__main__":
 	# If you run this file from the terminal
 	# this block of code is executed.
+	hero = Hero("Wonder Woman")
+	weapon = Weapon("Lasso of Truth", 90)
+	hero.add_weapon(weapon)
+	print(hero.attack())
 
+
+	""" 	
+  #part 3
 	hero1 = Hero("Wonder Woman")
 	hero2 = Hero("Dumbledore")
 	ability1 = Ability("Super Speed", 300)
@@ -105,7 +111,8 @@ if __name__ == "__main__":
 	hero1.add_ability(ability2)
 	hero2.add_ability(ability3)
 	hero2.add_ability(ability4)
-	hero1.fight(hero2)
+	hero1.fight(hero2) 
+	"""
 
 
 
@@ -146,7 +153,7 @@ if __name__ == "__main__":
  """
 
 
-"""    
+	"""    
 	 my_hero = Hero('Pinky and the Brain', 250)
    my_hero2 = Hero('Jimmy Neutron', 300)
    print(my_hero.name)
