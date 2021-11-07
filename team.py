@@ -8,14 +8,12 @@ class Team:
   def add_hero(self, hero):
     self.heroes.append(hero)
 
-  def remove_hero(self, name):
-    foundHero = False
+  def remove_hero(self, name):    
     for hero in self.heroes:
       if hero.name == name:
         self.heroes.remove(hero)
-        foundHero = True
-      if not foundHero:
-        return 0
+        return True
+      return False
 
   def view_all_heroes(self):
       for hero in self.heroes:
@@ -23,7 +21,7 @@ class Team:
 
   def stats(self):
     for hero in self.heroes:
-      kd = hero.kills / hero.deaths
+      kd = hero.kills / (hero.deaths or 1)
       print(f'{hero.name} Kill/Deaths: {kd}')
 
   def revive_heroes(self, health=100):
@@ -31,8 +29,8 @@ class Team:
       hero.current_health = hero.starting_health
 
   def attack(self, other_team):
-    living_heroes = list()
-    living_opponents = list()
+    living_heroes = []
+    living_opponents = []
 
     for hero in self.heroes:
       living_heroes.append(hero)

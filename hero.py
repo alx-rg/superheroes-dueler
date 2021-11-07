@@ -23,33 +23,39 @@ class Hero:
 		self.current_health = starting_health
 
 	def fight(self, opponent):
-		if len(self.abilities) == 0 and len(opponent.abilities) == 0:
+		if (len(self.abilities) == 0) and (len(opponent.abilities) == 0):
 			print("Neither Heroes have abilities, it's a draw")
+			opponent.current_health = 0
+			self.current_health = 0
 		else:
-			while self.is_alive() == True or opponent.is_alive() == True:
-				self.take_damage(opponent.attack())
-				opponent.take_damage(self.attack())
-				if opponent.is_alive() == True:
-					self.add_death(1)
-					opponent.add_kill(1)
-					print(f'{opponent.name} beat the crap out of {self.name} (and won)!')
-				elif self.is_alive() == True:
+			while True:
+				attack_damage = self.attack()
+				opponent_attack_damage = opponent.attack()
+				self.take_damage(opponent_attack_damage)				
+				opponent.take_damage(attack_damage)
+				if not self.is_alive() and not opponent.is_alive():
+						print("They both knocked each other out, it's a draw!")
+						self.add_death(1)
+						opponent.add_death(1)
+						break											
+				elif not opponent.is_alive():
+					opponent.add_death(1)
 					self.add_kill(1)
-					opponent.add_death(1)
-					print(f'{self.name} won! And beat the piss out of {opponent.name}!')
-					return 'win'
-				elif self.is_alive() == False and opponent.is_alive() == False:
-					print("They offed each other, :( it's a draw!")
-					opponent.add_death(1)
+					print(f'{self.name} won! And beat the crap out of {opponent.name}!')
+					break
+				elif not self.is_alive():
+					opponent.add_kill(1)
 					self.add_death(1)
-				else:
-					return
+					print(f'{opponent.name} won! And beat the snot out of {self.name}!')
+					break
+					
+
 
 	def add_kill(self, num_kills):
-		self.kills = num_kills + self.kills
+		self.kills += num_kills
 
 	def add_death(self, num_deaths):
-		self.deaths = num_deaths + self.deaths
+		self.deaths += num_deaths
 
 	def add_ability(self, ability):
 		self.abilities.append(ability)
@@ -73,14 +79,9 @@ class Hero:
 		self.abilities.append(weapon)
 
 	def take_damage(self, damage):
-		damage_total = damage - self.defend()
-		while self.current_health > 0:
-			if damage_total > 0:
-				self.current_health -= damage_total
-				print(f'{self.name} has taken {damage_total} of damage.')
-				print(f'Health is down to: {self.current_health}')
-			else:
-				return
+		damage_total = self.defend()
+		damage_took = max(damage - damage_total, 0)
+		self.current_health -= damage_took
 
 
 	def is_alive(self):
@@ -109,26 +110,26 @@ class Hero:
 if __name__ == "__main__":
 	# If you run this file from the terminal
 	# this block of code is executed.
-	hero = Hero("Wonder Woman")
-	weapon = Weapon("Lasso of Truth", 90)
-	hero.add_weapon(weapon)
-	print(hero.attack())
+	#hero = Hero("Wonder Woman")
+	#weapon = Weapon("Lasso of Truth", 90)
+	#hero.add_weapon(weapon)
+	#print(hero.attack())
 
 
-	""" 	
+	 	
   #part 3
 	hero1 = Hero("Wonder Woman")
 	hero2 = Hero("Dumbledore")
 	ability1 = Ability("Super Speed", 300)
 	ability2 = Ability("Super Eyes", 130)
-	ability3 = Ability("Wizard Wand", 80)
+	ability3 = Ability("Wizard Wand", 10)
 	ability4 = Ability("Wizard Beard", 20)
 	hero1.add_ability(ability1)
 	hero1.add_ability(ability2)
 	hero2.add_ability(ability3)
 	hero2.add_ability(ability4)
-	hero1.fight(hero2) 
-	"""
+	hero1.fight(hero2)
+	
 
 
 
