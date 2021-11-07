@@ -12,6 +12,9 @@ class Hero:
 	def __init__(self, name, starting_health=100):
 		self.abilities = list()
 		self.armors = list()
+		self.deaths = 0
+		self.kills = 0
+
     # abilities and armors don't have starting values,
     # and are set to empty lists on initialization
 		# name of hero goes below		
@@ -26,14 +29,27 @@ class Hero:
 			while self.is_alive() == True or opponent.is_alive() == True:
 				self.take_damage(opponent.attack())
 				opponent.take_damage(self.attack())
-				if opponent.is_alive() == True and self.is_alive() == False:
-					print(f'{self.name} beat the crap out of {opponent.name} (and won)!')
-				elif self.is_alive() == True and opponent.is_alive() == False:
-					print(f'{opponent.name} won! And beat the piss out of {self.name}!')
+				if opponent.is_alive() == True:
+					self.add_death(1)
+					opponent.add_kill(1)
+					print(f'{opponent.name} beat the crap out of {self.name} (and won)!')
+				elif self.is_alive() == True:
+					self.add_kill(1)
+					opponent.add_death(1)
+					print(f'{self.name} won! And beat the piss out of {opponent.name}!')
+					return 'win'
 				elif self.is_alive() == False and opponent.is_alive() == False:
 					print("They offed each other, :( it's a draw!")
+					opponent.add_death(1)
+					self.add_death(1)
 				else:
 					return
+
+	def add_kill(self, num_kills):
+		self.kills = num_kills + self.kills
+
+	def add_death(self, num_deaths):
+		self.deaths = num_deaths + self.deaths
 
 	def add_ability(self, ability):
 		self.abilities.append(ability)
@@ -72,7 +88,7 @@ class Hero:
 			return False
 		else:
 			return True
-	
+
 
 		""" 
 		#Damage and health 	
